@@ -14,28 +14,42 @@ mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.log(err));
 
+app.get("/", (req, res) => {
+  res.send("Ara Erika Booking Backend Running");
+});
+
 app.post("/api/bookings", async (req, res) => {
   try {
-    const booking = new Booking(req.body);
+    const booking = new Booking({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      photographyPackage: req.body.photographyPackage,
+      preferredDate: req.body.preferredDate,
+      preferredTime: req.body.preferredTime,
+      location: req.body.location,
+      numberOfPeople: Number(req.body.numberOfPeople),
+      notes: req.body.notes,
+      status: "Pending"
+    });
+
     await booking.save();
 
-    res.json({
+    res.status(201).json({
       message: "Booking submitted successfully"
     });
 
   } catch (error) {
     res.status(400).json({
-      message: "Booking failed"
+      message: "Booking failed",
+      error: error.message
     });
   }
-});
-
-app.get("/", (req, res) => {
-  res.send("Ara Erika Booking Backend Running");
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(Server running on port ${PORT});
 });
