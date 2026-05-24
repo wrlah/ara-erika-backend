@@ -11,6 +11,7 @@ const bookingSchema = new mongoose.Schema({
   location: String,
   numberOfPeople: Number,
   notes: String,
+
   status: {
     type: String,
     default: "Pending"
